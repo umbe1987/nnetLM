@@ -5,47 +5,53 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/umbe1987/nnetLM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/umbe1987/nnetLM/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of nnetLM is to …
+nnetLM provides is a Neural Network package that uses the
+Levenberg-Marquardt algorithm provided in the minpack.lm package for
+parameter optimization.
 
 ## Installation
 
-You can install the development version of nnetLM like so:
+You can install nnetLM like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+install.packages("nnetLM")
+```
+
+or the development version like so:
+
+``` r
+devtools::install_github("umbe1987/nnetLM")
 ```
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This example shows how to instantiate a basic network object, train it
+using a dummy data set, and make predictions:
 
 ``` r
 library(nnetLM)
-## basic example code
+
+set.seed(123)
+
+x <- seq(-10, 10, by = 0.1)
+y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
+X <- matrix(x, nrow = length(x), ncol = 1)
+
+plot(x, y)
+
+hidden <- c(10)
+actFn <- c("tanh", "linear")
+nnet_obj <- nnetLM(X, y, hidden, actFn)
+
+## perform fit
+nnet_obj <- train.nnetLM(nnet_obj, 50)
+#> Warning in nls.lm(par = parStart, fn = residFun, observed = object$y, xx = object$X, : lmdif: info = -1. Number of iterations has reached `maxiter' == 50.
+pred.nnetLM <- predict(nnet_obj, X)
+
+lines(x, pred.nnetLM, col = "blue")
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+<img src="man/figures/README-example-1.png" width="100%" />
