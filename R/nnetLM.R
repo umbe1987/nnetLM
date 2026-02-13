@@ -37,16 +37,15 @@ nnetLM <- function(X, y, hidden, actFn) {
     W[[i]] <- matrix(stats::runif(hidden[i] * hidden[i + 1], -1, 1), nrow = hidden[i + 1], ncol = hidden[i])
     b[[i]] <- 1
   }
-  res <- list(X = X, y = y, W = W, b = b, hidden = hidden, actFn = actFn)
+  res <- list(X = X, y = y, W = W, b = b, hidden = hidden, actFn = actFn, par = NULL)
   validate_nnetLM(new_nnetLM(res))
 }
 
 #' Performs a forward pass
 #'
-#' @param object an object of class "nnetLM"
+#' @param object a trained network object of class "nnetLM"
 #' @param newdata Matrix of predictors
-#' @param params vector of flattened network parameters (weights and biases)
-#' @returns An object with S3 class "nnetLM"
+#' @returns a numeric vector with predicted values
 #' @seealso [flatten_params()]
 #' @examples
 #' set.seed(123)
@@ -56,10 +55,14 @@ nnetLM <- function(X, y, hidden, actFn) {
 #' hidden <- c(10)
 #' actFn <- c("tanh", "linear")
 #' nnet.obj <- nnetLM(X, y, hidden, actFn)
-#' pred.nnetLM <- predict(nnet.obj, X, nnetLM:::flatten_params(nnet.obj))
+#' nnet.obj$par <- nnetLM:::flatten_params(nnet.obj)
+#' pred.nnetLM <- predict(nnet.obj, X)
 #' @exportS3Method stats::predict
-predict.nnetLM <- function(object, newdata, params) {
-  upar <- unflatten_params(params, object)
+predict.nnetLM <- function(object, newdata) {
+  if (is.null(object$par)) {
+    stop("Please train the network with train.nnetLM before passing it to predict.nnetLM")
+  }
+  upar <- unflatten_params(object$par, object)
   outputs <- lapply(1:nrow(newdata), function(i) {
     out.i <- newdata[i, , drop = FALSE]
     for (j in 1:(length(object$hidden) - 1)) {
@@ -111,7 +114,10 @@ unflatten_params <- function(params, object) {
 #' @param xx an object of class "nnetLM"
 #' @returns unflattened list with network parameters (weights and biases)
 #' @seealso [flatten_params()]
-residFun <- function(params, observed, object, xx) observed - predict.nnetLM(object, xx, params)
+residFun <- function(params, observed, object, xx) {
+  object$par <- params
+  observed - predict.nnetLM(object, xx)
+}
 
 #' Train the neural network with Levenberg-Marquardt optimization
 #' using [minipack.lm::nls.lm]

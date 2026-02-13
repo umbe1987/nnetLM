@@ -4,17 +4,15 @@
 \alias{predict.nnetLM}
 \title{Performs a forward pass}
 \usage{
-\method{predict}{nnetLM}(object, newdata, params)
+\method{predict}{nnetLM}(object, newdata)
 }
 \arguments{
-\item{object}{an object of class "nnetLM"}
+\item{object}{a trained network object of class "nnetLM"}
 
 \item{newdata}{Matrix of predictors}
-
-\item{params}{vector of flattened network parameters (weights and biases)}
 }
 \value{
-An object with S3 class "nnetLM"
+a numeric vector with predicted values
 }
 \description{
 Performs a forward pass
@@ -27,7 +25,8 @@ X <- matrix(x, nrow = length(x), ncol = 1)
 hidden <- c(10)
 actFn <- c("tanh", "linear")
 nnet.obj <- nnetLM(X, y, hidden, actFn)
-pred.nnetLM <- predict(nnet.obj, X, nnetLM:::flatten_params(nnet.obj))
+nnet.obj$par <- nnetLM:::flatten_params(nnet.obj)
+pred.nnetLM <- predict(nnet.obj, X)
 }
 \seealso{
 [flatten_params()]

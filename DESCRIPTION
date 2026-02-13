@@ -9,6 +9,7 @@ Description: An implementation of a Neural Network using the
     Levenberg-Marqardt optimization from minpack.lm, ideal for small
     datasets.
 License: MIT + file LICENSE
+BugReports: https://github.com/umbe1987/nnetLM/issues
 Imports: 
     minpack.lm,
     stats
