@@ -8,9 +8,9 @@
 [![R-CMD-check](https://github.com/umbe1987/nnetLM/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/umbe1987/nnetLM/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-nnetLM provides is a Neural Network package that uses the
-Levenberg-Marquardt algorithm provided in the minpack.lm package for
-parameter optimization.
+nnetLM is a Neural Network package that uses the Levenberg-Marquardt
+algorithm implemented in the minpack.lm package for parameter
+optimization.
 
 ## Installation
 
@@ -43,11 +43,12 @@ X <- matrix(x, nrow = length(x), ncol = 1)
 plot(x, y)
 
 hidden <- c(10)
-actFn <- c("tanh", "linear")
+linear <- function(x) x
+actFn <- c(tanh, linear)
 nnet_obj <- nnetLM(X, y, hidden, actFn)
 
 ## perform fit
-nnet_obj <- train.nnetLM(nnet_obj, 50)
+nnet_obj <- train.nnetLM(nnet_obj, epochs = 50)
 #> Warning in nls.lm(par = parStart, fn = residFun, observed = object$y, xx = object$X, : lmdif: info = -1. Number of iterations has reached `maxiter' == 50.
 pred.nnetLM <- predict(nnet_obj, X)
 
