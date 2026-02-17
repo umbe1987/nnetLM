@@ -16,7 +16,11 @@ validate_nnetLM <- function(x) {
 #' @param X Matrix of independent variables
 #' @param y Vector of dependent variables
 #' @param hidden Vector of number of nodes in each hidden layer
-#' @param actFn Vector of activation functions (must be length(hidden)+1 for the output node)
+#' @param actFn List of activation functions (must be length(hidden)+1 for the output node)
+#' @details
+#' The activation functions within [actFn] list can be any existing or user-defined
+#' function. They must have a single numeric argument (e.g. [x]), and must return
+#'  a numeric value of the same length as [x].
 #' @returns An object with S3 class "nnetLM"
 #' @examples
 #' set.seed(123)
@@ -24,7 +28,8 @@ validate_nnetLM <- function(x) {
 #' y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
 #' X <- matrix(x, nrow = length(x), ncol = 1)
 #' hidden <- c(10)
-#' actFn <- c("tanh", "linear")
+#' linear <- function(x) x
+#' actFn <- list(tanh, linear)
 #' nnet.obj <- nnetLM(X, y, hidden, actFn)
 #' @export
 nnetLM <- function(X, y, hidden, actFn) {
@@ -53,7 +58,8 @@ nnetLM <- function(X, y, hidden, actFn) {
 #' y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
 #' X <- matrix(x, nrow = length(x), ncol = 1)
 #' hidden <- c(10)
-#' actFn <- c("tanh", "linear")
+#' linear <- function(x) x
+#' actFn <- list(tanh, linear)
 #' nnet.obj <- nnetLM(X, y, hidden, actFn)
 #' nnet.obj$par <- nnetLM:::flatten_params(nnet.obj)
 #' pred.nnetLM <- predict(nnet.obj, X)
@@ -66,8 +72,9 @@ predict.nnetLM <- function(object, newdata) {
   outputs <- lapply(1:nrow(newdata), function(i) {
     out.i <- newdata[i, , drop = FALSE]
     for (j in 1:(length(object$hidden) - 1)) {
-      out.i <- out.i %*% t(upar$W[[j]]) + upar$b[j]
-      out.i <- do.call(object$actFn[j], list(x = out.i))
+      fn <- object$actFn[[j]] # J-th activation function
+      out.i <- tcrossprod(out.i,upar$W[[j]]) + upar$b[j]
+      out.i <- fn(out.i)
     }
     return(out.i)
   })

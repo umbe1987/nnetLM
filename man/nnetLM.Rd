@@ -13,7 +13,7 @@ nnetLM(X, y, hidden, actFn)
 
 \item{hidden}{Vector of number of nodes in each hidden layer}
 
-\item{actFn}{Vector of activation functions (must be length(hidden)+1 for the output node)}
+\item{actFn}{List of activation functions (must be length(hidden)+1 for the output node)}
 }
 \value{
 An object with S3 class "nnetLM"
@@ -21,12 +21,18 @@ An object with S3 class "nnetLM"
 \description{
 Initalize the neural network object
 }
+\details{
+The activation functions within [actFn] list can be any existing or user-defined
+function. They must have a single numeric argument (e.g. [x]), and must return
+ a numeric value of the same length as [x].
+}
 \examples{
 set.seed(123)
 x <- seq(-10, 10, by = 0.1)
 y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
 X <- matrix(x, nrow = length(x), ncol = 1)
 hidden <- c(10)
-actFn <- c("tanh", "linear")
+linear <- function(x) x
+actFn <- list(tanh, linear)
 nnet.obj <- nnetLM(X, y, hidden, actFn)
 }
