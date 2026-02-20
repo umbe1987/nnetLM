@@ -7,7 +7,7 @@ Authors@R:
            comment = c(ORCID = "0000-0003-2151-6500"))
 Description: An implementation of a Neural Network using the
     Levenberg-Marquardt optimization from 'minpack.lm', ideal for small
-    datasets.
+    datasets. For more details see Moré (1978) <doi:10.1007/BFb0067700>.
 License: MIT + file LICENSE
 BugReports: https://github.com/umbe1987/nnetLM/issues
 Imports: 
