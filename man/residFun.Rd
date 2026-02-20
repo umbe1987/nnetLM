@@ -21,6 +21,3 @@ unflattened list with network parameters (weights and biases)
 \description{
 Residual function needed by [minipack.lm::nls.lm]
 }
-\seealso{
-[flatten_params()]
-}

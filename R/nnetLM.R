@@ -51,7 +51,6 @@ nnetLM <- function(X, y, hidden, actFn) {
 #' @param object a trained network object of class "nnetLM"
 #' @param newdata Matrix of predictors
 #' @returns a numeric vector with predicted values
-#' @seealso [flatten_params()]
 #' @examples
 #' set.seed(123)
 #' x <- seq(-10, 10, by = 0.1)
@@ -61,7 +60,7 @@ nnetLM <- function(X, y, hidden, actFn) {
 #' linear <- function(x) x
 #' actFn <- list(tanh, linear)
 #' nnet.obj <- nnetLM(X, y, hidden, actFn)
-#' nnet.obj$par <- nnetLM:::flatten_params(nnet.obj)
+#' nnet.obj <- train.nnetLM(nnet.obj,50)
 #' pred.nnetLM <- predict(nnet.obj, X)
 #' @exportS3Method stats::predict
 predict.nnetLM <- function(object, newdata) {
@@ -120,7 +119,6 @@ unflatten_params <- function(params, object) {
 #' @param object an object of class "nnetLM"
 #' @param xx an object of class "nnetLM"
 #' @returns unflattened list with network parameters (weights and biases)
-#' @seealso [flatten_params()]
 residFun <- function(params, observed, object, xx) {
   object$par <- params
   observed - predict.nnetLM(object, xx)
@@ -134,6 +132,16 @@ residFun <- function(params, observed, object, xx) {
 #' @param progress flag for printing network progress. Default is FALSE
 #' @returns the trained network object
 #' @seealso [minipack.lm::nls.lm()]
+#' @examples
+#' x <- seq(-10, 10, by = 0.1)
+#' y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
+#' X <- matrix(x, nrow = length(x), ncol = 1)
+#' hidden <- c(10)
+#' linear <- function(x) x
+#' actFn <- list(tanh, linear)
+#' nnet.obj <- nnetLM(X, y, hidden, actFn)
+#' nnet.obj <- train.nnetLM(nnet.obj,1)
+#'
 #' @import minpack.lm
 #' @export
 train.nnetLM <- function(object, epochs, progress = FALSE) {

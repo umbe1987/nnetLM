@@ -21,6 +21,17 @@ the trained network object
 Train the neural network with Levenberg-Marquardt optimization
 using [minipack.lm::nls.lm]
 }
+\examples{
+x <- seq(-10, 10, by = 0.1)
+y <- sin(x) + rnorm(length(x), mean = 0, sd = 0.1)
+X <- matrix(x, nrow = length(x), ncol = 1)
+hidden <- c(10)
+linear <- function(x) x
+actFn <- list(tanh, linear)
+nnet.obj <- nnetLM(X, y, hidden, actFn)
+nnet.obj <- train.nnetLM(nnet.obj,1)
+
+}
 \seealso{
 [minipack.lm::nls.lm()]
 }

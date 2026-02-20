@@ -26,9 +26,6 @@ hidden <- c(10)
 linear <- function(x) x
 actFn <- list(tanh, linear)
 nnet.obj <- nnetLM(X, y, hidden, actFn)
-nnet.obj$par <- nnetLM:::flatten_params(nnet.obj)
+nnet.obj <- train.nnetLM(nnet.obj,50)
 pred.nnetLM <- predict(nnet.obj, X)
-}
-\seealso{
-[flatten_params()]
 }
