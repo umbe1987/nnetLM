@@ -5,6 +5,13 @@ This is a resubmission. In this version I have:
 
 * Removed unexported functions from examples.
 
+* Added CRAN-SUBMISSION file to .Rbuildignore.
+
+Please notice that previous check logs from your part found "Possibly mispelled words"
+in the DESCRIPTION file. "Levenberg, "Marquardt" and "Moré" are correctly spelled words.
+Levenberg-Marquardt is the name of the algorithm used in this package.
+Moré is the name of the author describing the Levenberg-Marquardt algorithm.
+
 ## Resubmission
 This is a resubmission. In this version I have:
 
