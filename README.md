@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# nnetLM
+# nnetLM <img src="man/figures/logo.png" align="right" height="138" alt="" />
 
 <!-- badges: start -->
 
@@ -33,6 +33,7 @@ using a dummy data set, and make predictions:
 
 ``` r
 library(nnetLM)
+#> Warning: package 'nnetLM' was built under R version 4.5.3
 
 set.seed(123)
 
@@ -55,4 +56,4 @@ pred.nnetLM <- predict(nnet_obj, X)
 lines(x, pred.nnetLM, col = "blue")
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" />
